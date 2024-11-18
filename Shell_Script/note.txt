@@ -1,0 +1,24 @@
+>> Variable
++ defining variable
++ accessing values
++ read only variable
++ special variable
+    - $0 : the filename of the current script
+    - $# : the number of arguments supplied to a script
+    - $* : All the arguments are double quoted.
+    - $$ : The process number of the current shell. For shell scripts, this is the process ID under which they are executing
+    - $? : The exit status of the last command executed.
+    - S! : The process number of the last background command.
+
+>> Shell Basic Operators
++ val = `expr 2+2`
++ boolean
+    ! : not
+    -o : Or 
+    -a : AND
+
++ String Operators
+    = : checks if the values is equal or not
+    -z : check size is zero or not
+    -n : check if the the size string is nonzero or not
+    str: is empty string or not
