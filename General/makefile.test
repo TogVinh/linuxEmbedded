@@ -1,0 +1,43 @@
+CC = gcc
+CFLAGS = -Wall -Iinclude
+
+# Thư viện tĩnh (Static Library)
+LIB_SUM = libsum.a
+LIB_MINUS = libminus.so
+
+# Các file đối tượng
+OBJ_SUM = sum/sum.o
+OBJ_MINUS = minus/minus.o main.o
+
+# Quá trình build
+all: $(LIB_SUM) $(LIB_MINUS) main
+
+# Build thư viện tĩnh sum
+$(LIB_SUM): $(OBJ_SUM)
+	ar rcs $@ $^
+
+# Build thư viện chia sẻ minus
+$(LIB_MINUS): $(OBJ_MINUS)
+	$(CC) -shared -o $@ $^
+
+# Compile file main.c
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c -o main.o
+
+# Compile file sum.c
+sum/sum.o: sum/sum.c
+	$(CC) $(CFLAGS) -fPIC -c sum/sum.c -o sum/sum.o
+
+# Compile file minus.c
+minus/minus.o: minus/minus.c
+	$(CC) $(CFLAGS) -fPIC -c minus/minus.c -o minus/minus.o
+
+# Compile và liên kết main.o với thư viện
+main: main.o $(LIB_SUM) $(LIB_MINUS)
+	$(CC) $(CFLAGS) -o $@ main.o -L. -lsum -lminus -Wl,-rpath=.
+
+# Tùy chọn -Wl,-rpath=. sẽ nhúng đường dẫn thư mục hiện tại vào trong file thực thi để nó có thể tìm thấy thư viện libminus.so.
+
+# Clean tất cả các file được tạo ra
+clean:
+	rm -f $(OBJ_SUM) $(OBJ_MINUS) main.o $(LIB_SUM) $(LIB_MINUS) main
