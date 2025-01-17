@@ -1,0 +1,4 @@
+* critial sestion
+chỉ đoạn code được dùng dể chỉ đoạn code truy cập vào vùng tài nguyên được chia sẻ giữa các process
+
+*mutex

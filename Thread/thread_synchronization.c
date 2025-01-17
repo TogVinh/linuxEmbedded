@@ -14,29 +14,8 @@ typedef struct
     char msg[30];
 } thread_args_t;
 
-static void *handle_th1 (void *args)
-{
-    thread_args_t *thr = (thread_args_t *)args;
-    
-    pthread_mutex_lock(&lock1);
-
-    // critical section
-    printf("Hello %s !\n", thr->name);
-    printf("thread 1 is handler, counter: %d\n", ++counter);
-    sleep(5);
-
-    pthread_mutex_unlock(&lock1);
-    pthread_exit(NULL);
-}
-
-static void *handle_th2(void *args) 
-{
-    pthread_mutex_lock(&lock1);
-    printf("thread2 handler, counter: %d\n", ++counter);
-    pthread_mutex_unlock(&lock1);
-
-    pthread_exit(NULL); // exit
-}
+static void *handle_th1 (void *args);
+static void *handle_th2(void *args);
 
 int main(int argc, char const *argv[])
 {
@@ -63,4 +42,28 @@ int main(int argc, char const *argv[])
     pthread_join(thread_id2,NULL);
 
     return 0;
+}
+
+static void *handle_th1 (void *args)
+{
+    thread_args_t *thr = (thread_args_t *)args;
+    
+    pthread_mutex_lock(&lock1);
+
+    // critical section
+    printf("Hello %s !\n", thr->name);
+    printf("thread 1 is handler, counter: %d\n", ++counter);
+    sleep(5);
+
+    pthread_mutex_unlock(&lock1);
+    pthread_exit(NULL);
+}
+
+static void *handle_th2(void *args) 
+{
+    pthread_mutex_lock(&lock1);
+    printf("thread2 handler, counter: %d\n", ++counter);
+    pthread_mutex_unlock(&lock1);
+
+    pthread_exit(NULL); // exit
 }
