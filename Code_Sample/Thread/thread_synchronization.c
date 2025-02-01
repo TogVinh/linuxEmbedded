@@ -6,7 +6,7 @@
 
 pthread_mutex_t lock1 = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t lock2 = PTHREAD_MUTEX_INITIALIZER;
-int counter = 2;
+int counter = 2; // shared resource
 
 typedef struct
 {
@@ -54,6 +54,7 @@ static void *handle_th1 (void *args)
     printf("Hello %s !\n", thr->name);
     printf("thread 1 is handler, counter: %d\n", ++counter);
     sleep(5);
+    // end of critical section
 
     pthread_mutex_unlock(&lock1);
     pthread_exit(NULL);
