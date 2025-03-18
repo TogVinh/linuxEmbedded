@@ -1,0 +1,2 @@
+https://gpiozero.readthedocs.io/en/latest/installing.html
+https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#outputs
