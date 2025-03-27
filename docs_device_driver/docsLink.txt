@@ -1,2 +1,57 @@
 https://gpiozero.readthedocs.io/en/latest/installing.html
 https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#outputs
+https://devlinux.vn/blogs/Yocto-Project?page=2
+
+
+====
+# Flash OS
+sudo bzcat core-image-minimal-raspberrypi0-wifi-20250316021804.rootfs.wic.bz2 | sudo dd of=/dev/sdb bs=4M status=progress conv=fsync
+
+# Clone source kernel của rpi zero
+devtool modify virtual/kernel -> yocto_source/build/workspace/...
+
+# Tạo driver gpio trong source kernel
+- File Makfile
+EXTRA_CFLAGS = -Wall
+obj-m = mgpio.o
+
+├── Makefile
+├── mgpio.c
+└── mgpio.h
+
+# Build lại source 
+bitbake virtual/kernel
+
+# copy file mgpio.ko vào thẻ nhớ
+- mount rồi copy vào /home/root
+
+# Recipe của kernel
+yocto/sources/poky/meta-raspberrypi/recipes-kernel/linux/linux-raspberrypi_5.4.bb
+
+# Cấu hình Uart
+- CP2102 module
+	CP_TX
+	CP_RX
+	CP_GND
+
+- RPI zero W
+	PI_TX (pin8 - gpio14)
+	PI_RX (pin10 - gpio15)
+	PI_GND (pin6)
+
+Nối dây:
+CP_TX -> PI_RX
+CP_RX -> PI_TX
+GND -> GND
+
+- Sửa file /boot/cmdline.txt
+dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait console=serial0,115200 console=tty1
+
+- Thêm vào cuối file /boot/config.txt
+enable_uart=1
+
+# Thêm module vào kernel
+insmod mgpio.ko
+
+# Xóa module khỏi kernel
+rmmod mgpio.ko
